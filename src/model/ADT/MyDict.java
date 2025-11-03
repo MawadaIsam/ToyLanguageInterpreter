@@ -36,4 +36,8 @@ public class MyDict<K, V> implements MyIDict<K, V> {
   public V find(K key) {
     return map.get(key);
   }
+
+  public String toString() {
+    return map.toString();
+  }
 }
