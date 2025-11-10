@@ -1,9 +1,9 @@
 package model.exp;
 
-import exceptions.MyException;
+import exceptions.ExpressionException;
 import model.ADT.MyIDict;
 import model.values.Value;
 
 public interface Exp {
-    Value eval (MyIDict <String,Value> tbl) throws MyException;
+    Value eval (MyIDict <String,Value> tbl) throws ExpressionException;
 }

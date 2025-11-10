@@ -1,5 +1,6 @@
 package model.statements;
 
+import exceptions.ExpressionException;
 import exceptions.MyException;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,26 +20,26 @@ public class OpenRFile implements Stmt {
   }
 
   @Override
-  public PrgState execute(PrgState prg) throws MyException {
-      Value value=exp.eval(prg.getSymTable());
-      if(!value.getType().equals(new  StringType()))
-          throw new MyException("Expression is not a string");
-      StringValue fileName =(StringValue)value;
-      MyIDict<StringValue,BufferedReader> fileTable=prg.getFileTable();
+  public PrgState execute(PrgState prg) throws MyException, ExpressionException {
+    Value value = exp.eval(prg.getSymTable());
+    if (!value.getType().equals(new StringType()))
+      throw new MyException("Expression is not a string");
+    StringValue fileName = (StringValue) value;
+    MyIDict<StringValue, BufferedReader> fileTable = prg.getFileTable();
 
-      if(fileTable.isDefined(fileName))
-          throw new MyException("File already opened");
+    if (fileTable.isDefined(fileName)) throw new MyException("File already opened");
 
-      try{
-          BufferedReader br = new BufferedReader(new FileReader(fileName.getValue()));
-          fileTable.update(fileName,br);
-      }catch(IOException e){
-          throw new MyException("Cannot open file"+fileName.getValue()+" : "+e.getMessage());
-      }
-      return prg;
+    try {
+      BufferedReader br = new BufferedReader(new FileReader(fileName.getValue()));
+      fileTable.update(fileName, br);
+    } catch (IOException e) {
+      throw new MyException("Cannot open file" + fileName.getValue() + " : " + e.getMessage());
+    }
+    return prg;
   }
+
   @Override
-    public String toString(){
-      return "openRFile("+exp+")";
+  public String toString() {
+    return "openRFile(" + exp + ")";
   }
 }

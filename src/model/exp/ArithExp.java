@@ -1,6 +1,6 @@
 package model.exp;
 
-import exceptions.MyException;
+import exceptions.ExpressionException;
 import model.ADT.MyIDict;
 import model.types.IntType;
 import model.values.IntValue;
@@ -18,7 +18,7 @@ public class ArithExp implements Exp {
   }
 
   @Override
-  public Value eval(MyIDict<String, Value> tbl) throws MyException {
+  public Value eval(MyIDict<String, Value> tbl) throws ExpressionException {
     Value v1, v2;
     v1 = left.eval(tbl);
     if (v1.getType().equals(new IntType())) {
@@ -35,13 +35,13 @@ public class ArithExp implements Exp {
         } else if (op == 3) {
           return new IntValue(n1 * n2);
         } else if (op == 4) {
-          if (n2 == 0) throw new MyException("Divion by zero");
+          if (n2 == 0) throw new ExpressionException("Divion by zero");
           else return new IntValue(n1 / n2);
 
-        } else throw new MyException("Unknown operation");
+        } else throw new ExpressionException("Unknown operation");
 
-      } else throw new MyException("Second operand is not an integer");
-    } else throw new MyException("First operand is not an integer");
+      } else throw new ExpressionException("Second operand is not an integer");
+    } else throw new ExpressionException("First operand is not an integer");
   }
 
   @Override

@@ -1,6 +1,6 @@
 package model.exp;
 
-import exceptions.MyException;
+import exceptions.ExpressionException;
 import model.ADT.MyIDict;
 import model.types.BoolType;
 import model.values.BoolValue;
@@ -18,7 +18,7 @@ public class LogicExp implements Exp {
   }
 
   @Override
-  public Value eval(MyIDict<String, Value> tbl) throws MyException {
+  public Value eval(MyIDict<String, Value> tbl) throws ExpressionException {
     Value v1, v2;
     v1 = left.eval(tbl);
     if (v1.getType().equals(new BoolType())) {
@@ -32,10 +32,10 @@ public class LogicExp implements Exp {
           return new BoolValue(n1 && n2);
         } else if (op == 2) {
           return new BoolValue(n1 || n2);
-        } else throw new MyException("enter a valid operator");
+        } else throw new ExpressionException("enter a valid operator");
 
-      } else throw new MyException("Second operand is not a boolean");
-    } else throw new MyException("First operand is not a boolean");
+      } else throw new ExpressionException("Second operand is not a boolean");
+    } else throw new ExpressionException("First operand is not a boolean");
   }
 
   @Override

@@ -1,5 +1,6 @@
 package controller;
 
+import exceptions.ExpressionException;
 import exceptions.MyException;
 import model.ADT.MyIStack;
 import model.PrgState;
@@ -13,7 +14,7 @@ public class Controller {
     this.repo = repo;
   }
 
-  public PrgState oneStep(PrgState state) throws MyException {
+  public PrgState oneStep(PrgState state) throws MyException, ExpressionException {
     MyIStack<Stmt> stk = state.getStk();
     if (stk.isEmpty()) {
       throw new MyException("Empty stack");
@@ -22,7 +23,7 @@ public class Controller {
     return currStmt.execute(state);
   }
 
-  public void allStep() throws MyException {
+  public void allStep() throws MyException, ExpressionException {
     PrgState prg = repo.getCrtPrg();
     // System.out.println("Initial State:\n" + prg);
     repo.logPrgStateExec();

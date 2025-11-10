@@ -1,6 +1,6 @@
 package model.exp;
 
-import exceptions.MyException;
+import exceptions.ExpressionException;
 import model.ADT.MyIDict;
 import model.values.Value;
 
@@ -12,7 +12,7 @@ public class VarExp implements Exp {
   }
 
   @Override
-  public Value eval(MyIDict<String, Value> tbl) throws MyException {
+  public Value eval(MyIDict<String, Value> tbl) throws ExpressionException {
     return tbl.find(id);
   }
 

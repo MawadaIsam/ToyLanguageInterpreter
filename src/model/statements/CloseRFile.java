@@ -1,5 +1,7 @@
 package model.statements;
 
+import exceptions.ADTException;
+import exceptions.ExpressionException;
 import exceptions.MyException;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +25,7 @@ public class CloseRFile implements Stmt {
   }
 
   @Override
-  public PrgState execute(PrgState prg) throws MyException {
+  public PrgState execute(PrgState prg) throws MyException, ExpressionException {
     Value val = exp.eval(prg.getSymTable());
     if (!val.getType().equals(new StringType())) throw new MyException("Expression not string");
 
@@ -36,7 +38,7 @@ public class CloseRFile implements Stmt {
     try {
       br.close();
       fileTable.remove(fileName);
-    } catch (IOException e) {
+    } catch (ADTException | IOException e) {
       throw new MyException("IO error while closing ");
     }
     return prg;

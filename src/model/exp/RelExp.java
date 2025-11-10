@@ -1,6 +1,6 @@
 package model.exp;
 
-import exceptions.MyException;
+import exceptions.ExpressionException;
 import model.ADT.MyIDict;
 import model.types.IntType;
 import model.values.BoolValue;
@@ -19,14 +19,14 @@ public class RelExp implements Exp {
   }
 
   @Override
-  public Value eval(MyIDict<String, Value> tbl) throws MyException {
+  public Value eval(MyIDict<String, Value> tbl) throws ExpressionException {
     Value v1 = left.eval(tbl);
     Value v2 = right.eval(tbl);
 
     if (!v1.getType().equals(new IntType()))
-      throw new MyException("First operand is not a integer");
+      throw new ExpressionException("First operand is not a integer");
     if (!v2.getType().equals(new IntType()))
-      throw new MyException("Second operand is not a integer");
+      throw new ExpressionException("Second operand is not a integer");
 
     int n1 = ((IntValue) v1).getValue();
     int n2 = ((IntValue) v2).getValue();
@@ -38,7 +38,7 @@ public class RelExp implements Exp {
       case "!=" -> new BoolValue(n2 != n1);
       case ">=" -> new BoolValue(n1 >= n2);
       case "<=" -> new BoolValue(n1 <= n2);
-      default -> throw new MyException("Invalid relational operator");
+      default -> throw new ExpressionException("Invalid relational operator");
     };
   }
 

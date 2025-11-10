@@ -1,6 +1,9 @@
 package model.statements;
 
+import exceptions.ExpressionException;
 import exceptions.MyException;
+import java.io.BufferedReader;
+import java.io.IOException;
 import model.ADT.MyIDict;
 import model.PrgState;
 import model.exp.Exp;
@@ -9,9 +12,6 @@ import model.types.StringType;
 import model.values.IntValue;
 import model.values.StringValue;
 import model.values.Value;
-
-import java.io.BufferedReader;
-import java.io.IOException;
 
 public class ReadFile implements Stmt {
   private Exp exp;
@@ -28,7 +28,7 @@ public class ReadFile implements Stmt {
   }
 
   @Override
-  public PrgState execute(PrgState prg) throws MyException {
+  public PrgState execute(PrgState prg) throws MyException, ExpressionException {
     MyIDict<String, Value> symTable = prg.getSymTable();
     MyIDict<StringValue, BufferedReader> fileTable = prg.getFileTable();
 

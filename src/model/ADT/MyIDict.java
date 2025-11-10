@@ -1,6 +1,6 @@
 package model.ADT;
 
-import exceptions.MyException;
+import exceptions.ADTException;
 import java.util.Map;
 
 public interface MyIDict<K, V> {
@@ -12,5 +12,5 @@ public interface MyIDict<K, V> {
 
   Map<K, V> getContent();
 
-  void remove(K key) throws MyException;
+  void remove(K key) throws ADTException;
 }

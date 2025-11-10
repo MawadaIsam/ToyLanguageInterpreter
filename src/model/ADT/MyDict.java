@@ -1,7 +1,6 @@
 package model.ADT;
 
-
-import exceptions.MyException;
+import exceptions.ADTException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,11 +37,11 @@ public class MyDict<K, V> implements MyIDict<K, V> {
   public V find(K key) {
     return map.get(key);
   }
+
   @Override
-  public void remove(K key) throws MyException {
-      if(!isDefined(key))
-          throw new MyException("Cannot remove key: "+key+"not found.");
-      map.remove(key);
+  public void remove(K key) throws ADTException {
+    if (!isDefined(key)) throw new ADTException("Cannot remove key: " + key + "not found.");
+    map.remove(key);
   }
 
   public String toString() {
