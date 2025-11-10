@@ -1,5 +1,8 @@
 package model.ADT;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Stack;
 
 public class MyStack<T> implements MyIStack<T> {
@@ -31,5 +34,12 @@ public class MyStack<T> implements MyIStack<T> {
   @Override
   public String toString() {
     return stack.toString();
+  }
+
+  @Override
+  public List<T> getReversed() {
+    List<T> list = new ArrayList<>(stack);
+    Collections.reverse(list);
+    return list;
   }
 }

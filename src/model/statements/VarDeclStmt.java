@@ -3,11 +3,7 @@ package model.statements;
 import exceptions.MyException;
 import model.ADT.MyIDict;
 import model.PrgState;
-import model.types.BoolType;
-import model.types.IntType;
 import model.types.Type;
-import model.values.BoolValue;
-import model.values.IntValue;
 import model.values.Value;
 
 public class VarDeclStmt implements Stmt {
@@ -25,16 +21,17 @@ public class VarDeclStmt implements Stmt {
         MyIDict<String, Value> symTable=state.getSymTable();
         if(symTable.isDefined(name)){
             throw new MyException("the variable "+name+" is already defined");
-        }
-        if(type instanceof IntType){
-            symTable.update(name, new IntValue(0));
-        }
-        else if(type instanceof BoolType){
-      symTable.update(name, new BoolValue(false));
-        }
-        else{
-            throw new MyException("the variable "+name+" is of unsupported type");
-        }
+    }
+    /*if(type instanceof IntType){
+          symTable.update(name, new IntValue(0));
+      }
+      else if(type instanceof BoolType){
+    symTable.update(name, new BoolValue(false));
+      }
+      else{
+          throw new MyException("the variable "+name+" is of unsupported type");
+      }*/
+    else symTable.update(name, type.defaultValue());
         return state;
     }
 }

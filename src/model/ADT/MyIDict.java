@@ -1,5 +1,6 @@
 package model.ADT;
 
+import exceptions.MyException;
 import java.util.Map;
 
 public interface MyIDict<K, V> {
@@ -10,4 +11,6 @@ public interface MyIDict<K, V> {
   boolean isDefined(K key);
 
   Map<K, V> getContent();
+
+  void remove(K key) throws MyException;
 }

@@ -24,11 +24,13 @@ public class Controller {
 
   public void allStep() throws MyException {
     PrgState prg = repo.getCrtPrg();
-    System.out.println("Initial State:\n" + prg);
+    // System.out.println("Initial State:\n" + prg);
+    repo.logPrgStateExec();
 
     while (!prg.getStk().isEmpty()) {
       oneStep(prg);
-      System.out.println("Current State:\n" + prg);
+      repo.logPrgStateExec();
+      // System.out.println("Current State:\n" + prg);
     }
   }
 }

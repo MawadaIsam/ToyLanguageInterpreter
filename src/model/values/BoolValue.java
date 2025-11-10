@@ -15,12 +15,18 @@ public class BoolValue implements Value {
   }
 
   public String toString() {
-    return Boolean.toString(val);
+    return String.valueOf(val);
   }
 
   @Override
   public Type getType() {
 
     return new BoolType();
+  }
+
+  @Override
+  public boolean equals(Value obj) {
+    if (obj instanceof BoolValue) return ((BoolValue) obj).val == this.val;
+    return false;
   }
 }
