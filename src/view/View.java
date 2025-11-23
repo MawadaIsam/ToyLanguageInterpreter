@@ -5,13 +5,11 @@ import exceptions.MyException;
 import java.io.BufferedReader;
 import model.*;
 import model.ADT.*;
-import model.exp.ArithExp;
-import model.exp.RelExp;
-import model.exp.ValueExp;
-import model.exp.VarExp;
+import model.exp.*;
 import model.statements.*;
 import model.types.BoolType;
 import model.types.IntType;
+import model.types.RefType;
 import model.types.StringType;
 import model.values.BoolValue;
 import model.values.IntValue;
@@ -97,13 +95,77 @@ public class View {
                 new PrintStmt(new ValueExp(new IntValue(100))))));
   }
 
+  private static Stmt ex6() {
+    return new CompStmt(
+        new VarDeclStmt("v", new RefType(new IntType())),
+        new CompStmt(
+            new NewStmt("v", new ValueExp(new IntValue(20))),
+            new CompStmt(
+                new VarDeclStmt("a", new RefType(new RefType(new IntType()))),
+                new CompStmt(
+                    new NewStmt("a", new VarExp("v")),
+                    new CompStmt(
+                        new PrintStmt(new ReadHeapExp(new VarExp("v"))),
+                        new PrintStmt(
+                            new ArithExp(
+                                new ReadHeapExp(new ReadHeapExp(new VarExp("a"))),
+                                new ValueExp(new IntValue(5)),
+                                1)))))));
+  }
+
+  private static Stmt ex7() {
+    return new CompStmt(
+        new VarDeclStmt("v", new RefType(new IntType())),
+        new CompStmt(
+            new NewStmt("v", new ValueExp(new IntValue(20))),
+            new CompStmt(
+                new PrintStmt(new ReadHeapExp(new VarExp("v"))),
+                new CompStmt(
+                    new WriteHeapStmt("v", new ValueExp(new IntValue(30))),
+                    new PrintStmt(
+                        new ArithExp(
+                            new ReadHeapExp(new VarExp("v")),
+                            new ValueExp(new IntValue(5)),
+                            1))))));
+  }
+
+  private static Stmt ex8() {
+    return new CompStmt(
+        new VarDeclStmt("v", new RefType(new IntType())),
+        new CompStmt(
+            new NewStmt("v", new ValueExp(new IntValue(20))),
+            new CompStmt(
+                new VarDeclStmt("a", new RefType(new RefType(new IntType()))),
+                new CompStmt(
+                    new NewStmt("a", new VarExp("v")),
+                    new CompStmt(
+                        new NewStmt("v", new ValueExp(new IntValue(30))),
+                        new PrintStmt(new ReadHeapExp(new ReadHeapExp(new VarExp("a")))))))));
+  }
+
+  private static Stmt ex9() {
+    return new CompStmt(
+        new VarDeclStmt("v", new IntType()),
+        new CompStmt(
+            new AssignStmt("v", new ValueExp(new IntValue(4))),
+            new CompStmt(
+                new WhileStmt(
+                    new RelExp(new VarExp("v"), new ValueExp(new IntValue(0)), ">"),
+                    new CompStmt(
+                        new PrintStmt(new VarExp("v")),
+                        new AssignStmt(
+                            "v", new ArithExp(new VarExp("v"), new ValueExp(new IntValue(1)), 2)))),
+                new PrintStmt(new VarExp("v")))));
+  }
+
   private static PrgState createPrgState(Stmt originalPrg) throws MyException {
     MyIStack<Stmt> exeStack = new MyStack<>();
     MyIDict<String, Value> symTable = new MyDict<>();
     MyIList<Value> output = new MyList<>();
     MyIDict<StringValue, BufferedReader> fileTable = new MyDict<>();
+    MyIHeap<Integer, Value> heap = new MyHeap<>();
 
-    return new PrgState(exeStack, symTable, output, fileTable, originalPrg);
+    return new PrgState(exeStack, symTable, output, fileTable, heap, originalPrg);
   }
 
   private static Controller createController(Stmt stmt, String logFilePath) throws MyException {
@@ -120,6 +182,10 @@ public class View {
     menu.addCommand(new RunExample("3", ex3(), createController(ex3(), "log3.txt")));
     menu.addCommand(new RunExample("4", ex4(), createController(ex4(), "log4.txt")));
     menu.addCommand(new RunExample("5", ex5(), createController(ex5(), "log5.txt")));
+    menu.addCommand(new RunExample("6", ex6(), createController(ex6(), "log6.txt")));
+    menu.addCommand(new RunExample("7", ex7(), createController(ex7(), "log7.txt")));
+    menu.addCommand(new RunExample("8", ex8(), createController(ex8(), "log8.txt")));
+    menu.addCommand(new RunExample("9", ex9(), createController(ex9(), "log9.txt")));
 
     menu.addCommand(new ExitCommand("0", "Exit"));
 

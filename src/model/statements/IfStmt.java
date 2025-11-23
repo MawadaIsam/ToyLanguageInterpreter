@@ -32,7 +32,7 @@ public class IfStmt implements Stmt {
 
   @Override
   public PrgState execute(PrgState state) throws MyException, ExpressionException {
-    Value condition = exp.eval(state.getSymTable());
+    Value condition = exp.eval(state.getSymTable(), state.getHeap());
     if (!condition.getType().equals(new BoolType())) {
       throw new MyException("Condition is not boolean");
     }

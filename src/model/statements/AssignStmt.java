@@ -3,6 +3,7 @@ package model.statements;
 import exceptions.ExpressionException;
 import exceptions.MyException;
 import model.ADT.MyIDict;
+import model.ADT.MyIHeap;
 import model.ADT.MyIStack;
 import model.PrgState;
 import model.exp.Exp;
@@ -26,9 +27,10 @@ public class AssignStmt implements Stmt {
   public PrgState execute(PrgState state) throws MyException, ExpressionException {
     MyIStack<Stmt> stk = state.getStk();
     MyIDict<String, Value> symTable = state.getSymTable();
+    MyIHeap<Integer, Value> heap = state.getHeap();
 
     if (symTable.isDefined(id)) {
-      Value val = exp.eval(symTable);
+      Value val = exp.eval(symTable, heap);
       Type typeId = (symTable.find(id)).getType();
       if (val.getType().equals(typeId)) {
         symTable.update(id, val);

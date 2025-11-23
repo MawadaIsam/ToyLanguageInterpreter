@@ -21,7 +21,7 @@ public class OpenRFile implements Stmt {
 
   @Override
   public PrgState execute(PrgState prg) throws MyException, ExpressionException {
-    Value value = exp.eval(prg.getSymTable());
+    Value value = exp.eval(prg.getSymTable(), prg.getHeap());
     if (!value.getType().equals(new StringType()))
       throw new MyException("Expression is not a string");
     StringValue fileName = (StringValue) value;

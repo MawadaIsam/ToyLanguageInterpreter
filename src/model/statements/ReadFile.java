@@ -5,6 +5,7 @@ import exceptions.MyException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import model.ADT.MyIDict;
+import model.ADT.MyIHeap;
 import model.PrgState;
 import model.exp.Exp;
 import model.types.IntType;
@@ -31,13 +32,14 @@ public class ReadFile implements Stmt {
   public PrgState execute(PrgState prg) throws MyException, ExpressionException {
     MyIDict<String, Value> symTable = prg.getSymTable();
     MyIDict<StringValue, BufferedReader> fileTable = prg.getFileTable();
+    MyIHeap<Integer, Value> heap = prg.getHeap();
 
     if (!symTable.isDefined(varName))
       throw new MyException("Variable " + varName + " is not defined");
     if (!symTable.find(varName).getType().equals(new IntType()))
       throw new MyException("Variable " + varName + " is not an integer");
 
-    Value val = exp.eval(symTable);
+    Value val = exp.eval(symTable, heap);
     if (!val.getType().equals(new StringType()))
       throw new MyException("Expression is not a string");
 
@@ -50,7 +52,12 @@ public class ReadFile implements Stmt {
       String line = br.readLine();
       IntValue intVal;
       if (line == null) intVal = new IntValue(0);
-      else intVal = new IntValue(Integer.parseInt(line.trim()));
+      else
+        try {
+          intVal = new IntValue(Integer.parseInt(line.trim()));
+        } catch (NumberFormatException e) {
+          throw new MyException("File contains a non-integer value");
+        }
 
       symTable.update(varName, intVal);
 

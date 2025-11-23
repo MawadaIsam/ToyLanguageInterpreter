@@ -26,7 +26,7 @@ public class CloseRFile implements Stmt {
 
   @Override
   public PrgState execute(PrgState prg) throws MyException, ExpressionException {
-    Value val = exp.eval(prg.getSymTable());
+    Value val = exp.eval(prg.getSymTable(), prg.getHeap());
     if (!val.getType().equals(new StringType())) throw new MyException("Expression not string");
 
     StringValue fileName = (StringValue) val;

@@ -1,7 +1,9 @@
 package model.exp;
 
 import exceptions.ExpressionException;
+import exceptions.MyException;
 import model.ADT.MyIDict;
+import model.ADT.MyIHeap;
 import model.types.IntType;
 import model.values.IntValue;
 import model.values.Value;
@@ -18,11 +20,12 @@ public class ArithExp implements Exp {
   }
 
   @Override
-  public Value eval(MyIDict<String, Value> tbl) throws ExpressionException {
+  public Value eval(MyIDict<String, Value> tbl, MyIHeap<Integer, Value> hp)
+      throws ExpressionException, MyException {
     Value v1, v2;
-    v1 = left.eval(tbl);
+    v1 = left.eval(tbl, hp);
     if (v1.getType().equals(new IntType())) {
-      v2 = right.eval(tbl);
+      v2 = right.eval(tbl, hp);
       if (v2.getType().equals(new IntType())) {
         IntValue i1 = (IntValue) v1;
         IntValue i2 = (IntValue) v2;
