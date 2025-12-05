@@ -25,7 +25,7 @@ public class BoolValue implements Value {
   }
 
   @Override
-  public boolean equals(Value obj) {
+  public boolean equal(Value obj) {
     if (obj instanceof BoolValue) return ((BoolValue) obj).val == this.val;
     return false;
   }

@@ -4,7 +4,6 @@ import exceptions.ExpressionException;
 import exceptions.MyException;
 import model.ADT.MyIDict;
 import model.ADT.MyIHeap;
-import model.ADT.MyIStack;
 import model.PrgState;
 import model.exp.Exp;
 import model.types.Type;
@@ -25,7 +24,7 @@ public class AssignStmt implements Stmt {
 
   @Override
   public PrgState execute(PrgState state) throws MyException, ExpressionException {
-    MyIStack<Stmt> stk = state.getStk();
+    //MyIStack<Stmt> stk = state.getStk();
     MyIDict<String, Value> symTable = state.getSymTable();
     MyIHeap<Integer, Value> heap = state.getHeap();
 

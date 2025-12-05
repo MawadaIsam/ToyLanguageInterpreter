@@ -49,6 +49,6 @@ public class WriteHeapStmt implements Stmt {
 
   @Override
   public String toString() {
-    return "Write heap Statement" + varName + " ," + exp.toString();
+    return "Write heap Statement (" + varName + " ," + exp.toString() + ")";
   }
 }

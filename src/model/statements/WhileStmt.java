@@ -41,6 +41,6 @@ public class WhileStmt implements Stmt {
 
   @Override
   public String toString() {
-    return "While{" + "exp=" + exp.toString() + "}" + whileS.toString();
+    return "While{" + exp.toString() + "}" + whileS.toString();
   }
 }

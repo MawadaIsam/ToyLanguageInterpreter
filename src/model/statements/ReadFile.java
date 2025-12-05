@@ -51,20 +51,22 @@ public class ReadFile implements Stmt {
     try {
       String line = br.readLine();
       IntValue intVal;
-      if (line == null) intVal = new IntValue(0);
-      else
-        try {
-          intVal = new IntValue(Integer.parseInt(line.trim()));
-        } catch (NumberFormatException e) {
-          throw new MyException("File contains a non-integer value");
-        }
+      if (line == null || line.trim().isEmpty()) {
+        intVal = new IntValue(0);
+      } else
+      // try
+      {
+        intVal = new IntValue(Integer.parseInt(line.trim()));
+      } // catch (NumberFormatException e) {
+      // throw new MyException("File contains a non-integer value");
+      // }
 
       symTable.update(varName, intVal);
 
     } catch (IOException e) {
       throw new MyException("IO Error" + e.getMessage());
     } catch (NumberFormatException e) {
-      throw new MyException("Invalid integer format in file");
+      throw new MyException("File Contains a non-integer value");
     }
     return prg;
   }

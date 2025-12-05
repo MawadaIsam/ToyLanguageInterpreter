@@ -32,28 +32,28 @@ public class Repository implements IRespository {
     try (PrintWriter logFile =
         new PrintWriter(new BufferedWriter(new FileWriter(logFilePath, true)))) {
 
-      logFile.println("ExeStack:");
+      logFile.println("ExeStack: ");
       List<Stmt> stackContent = prg.getStk().getReversed();
       for (Stmt stmt : stackContent) {
         logFile.println(stmt.toString());
       }
 
-      logFile.println("SymTable:");
+      logFile.println("SymTable: ");
       Map<String, Value> symTableContent = prg.getSymTable().getContent();
       for (Map.Entry<String, Value> entry : symTableContent.entrySet()) {
         logFile.println(entry.getKey() + "--> " + entry.getValue().toString());
       }
-      logFile.println("Out");
+      logFile.println("Out: ");
       List<Value> outContent = prg.getOut().getList();
       for (Value value : outContent) {
         logFile.println(value.toString());
       }
-      logFile.println("File Table");
+      logFile.println("File Table: ");
       Map<StringValue, BufferedReader> fileTableContent = prg.getFileTable().getContent();
       for (Map.Entry<StringValue, BufferedReader> entry : fileTableContent.entrySet()) {
-        logFile.println(entry.getKey() + "--> " + entry.getValue().toString());
+        logFile.println(entry.getKey() + " --> " + entry.getValue().toString());
       }
-      logFile.println("HeapTable:");
+      logFile.println("HeapTable: ");
       logFile.println(prg.getHeap().toString());
 
       logFile.println();

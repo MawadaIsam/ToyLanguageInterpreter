@@ -24,7 +24,7 @@ public class StringValue implements Value {
   }
 
   @Override
-  public boolean equals(Value obj) {
+  public boolean equal(Value obj) {
     if (obj instanceof StringValue) return ((StringValue) obj).getValue().equals(this.value);
     return false;
   }

@@ -49,6 +49,6 @@ public class NewStmt implements Stmt {
 
   @Override
   public String toString() {
-    return " (NewStmt " + varName + " " + exp.toString() + ")";
+    return " New ( " + varName + ", " + exp.toString() + ")";
   }
 }

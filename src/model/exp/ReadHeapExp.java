@@ -32,6 +32,6 @@ public class ReadHeapExp implements Exp {
 
   @Override
   public String toString() {
-    return "ReadHeapExp" + exp.toString();
+    return "ReadHeapExp (" + exp.toString() + ")";
   }
 }

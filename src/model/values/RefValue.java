@@ -31,7 +31,7 @@ public class RefValue implements Value {
   }
 
   @Override
-  public boolean equals(Value other) {
+  public boolean equal(Value other) {
     if (other instanceof RefValue) {
       RefValue otherRef = (RefValue) other;
       return this.address == otherRef.address && this.locationType.equals(otherRef.locationType);

@@ -38,7 +38,7 @@ public class ArithExp implements Exp {
         } else if (op == 3) {
           return new IntValue(n1 * n2);
         } else if (op == 4) {
-          if (n2 == 0) throw new ExpressionException("Divion by zero");
+          if (n2 == 0) throw new ExpressionException("Division by zero");
           else return new IntValue(n1 / n2);
 
         } else throw new ExpressionException("Unknown operation");
@@ -49,7 +49,7 @@ public class ArithExp implements Exp {
 
   @Override
   public String toString() {
-    String opSympol =
+    String opSymbol =
         switch (op) {
           case 1 -> "+";
           case 2 -> "-";
@@ -57,6 +57,6 @@ public class ArithExp implements Exp {
           case 4 -> "/";
           default -> "?";
         };
-    return left.toString() + " " + opSympol + " " + right.toString();
+    return left.toString() + " " + opSymbol + " " + right.toString();
   }
 }
