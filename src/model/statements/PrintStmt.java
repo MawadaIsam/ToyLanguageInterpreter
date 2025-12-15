@@ -5,6 +5,7 @@ import exceptions.MyException;
 import model.ADT.*;
 import model.PrgState;
 import model.exp.Exp;
+import model.types.Type;
 import model.values.Value;
 
 public class PrintStmt implements Stmt {
@@ -16,6 +17,12 @@ public class PrintStmt implements Stmt {
 
   public String toString() {
     return "print(" + exp.toString() + ")";
+  }
+
+  @Override
+  public MyIDict<String, Type> typecheck(MyIDict<String, Type> typeEnv) throws MyException {
+    exp.typecheck(typeEnv);
+    return typeEnv;
   }
 
   @Override

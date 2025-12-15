@@ -5,6 +5,7 @@ import exceptions.MyException;
 import model.ADT.MyIDict;
 import model.ADT.MyIHeap;
 import model.types.IntType;
+import model.types.Type;
 import model.values.IntValue;
 import model.values.Value;
 
@@ -45,6 +46,22 @@ public class ArithExp implements Exp {
 
       } else throw new ExpressionException("Second operand is not an integer");
     } else throw new ExpressionException("First operand is not an integer");
+  }
+
+  @Override
+  public Type typecheck(MyIDict<String, Type> typeEnv) throws MyException {
+    Type type1 = left.typecheck(typeEnv);
+    Type type2 = right.typecheck(typeEnv);
+
+    if (type1.equals(new IntType())) {
+      if (type2.equals(new IntType())) {
+        return new IntType();
+      } else {
+        throw new MyException("Second operand is not an integer");
+      }
+    } else {
+      throw new MyException("First operand is not an integer");
+    }
   }
 
   @Override

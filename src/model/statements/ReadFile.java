@@ -10,6 +10,7 @@ import model.PrgState;
 import model.exp.Exp;
 import model.types.IntType;
 import model.types.StringType;
+import model.types.Type;
 import model.values.IntValue;
 import model.values.StringValue;
 import model.values.Value;
@@ -69,5 +70,16 @@ public class ReadFile implements Stmt {
       throw new MyException("File Contains a non-integer value");
     }
     return prg;
+  }
+
+  @Override
+  public MyIDict<String, Type> typecheck(MyIDict<String, Type> typeEnv) throws MyException {
+    Type typeExp = exp.typecheck(typeEnv);
+
+    if (!typeExp.equals(new StringType())) {
+      throw new MyException("ReadFile: Expression is not a string");
+    }
+
+    return typeEnv;
   }
 }

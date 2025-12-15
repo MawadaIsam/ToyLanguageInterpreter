@@ -11,6 +11,7 @@ import model.values.Value;
 
 public class Repository implements IRespository {
   private PrgState prg;
+  private List<PrgState> prgStates;
   private String logFilePath;
 
   public Repository(PrgState prg, String logFilePath) {

@@ -24,7 +24,7 @@ public class AssignStmt implements Stmt {
 
   @Override
   public PrgState execute(PrgState state) throws MyException, ExpressionException {
-    //MyIStack<Stmt> stk = state.getStk();
+    // MyIStack<Stmt> stk = state.getStk();
     MyIDict<String, Value> symTable = state.getSymTable();
     MyIHeap<Integer, Value> heap = state.getHeap();
 
@@ -38,5 +38,17 @@ public class AssignStmt implements Stmt {
             "declared type of variable" + id + "and type of the assigned expression do not match");
     } else throw new MyException("the used variable " + id + " was not declared before");
     return state;
+  }
+
+  @Override
+  public MyIDict<String, Type> typecheck(MyIDict<String, Type> typeEnv) throws MyException {
+    Type typeVar = typeEnv.find(id);
+    Type typeExp = exp.typecheck(typeEnv);
+
+    if (typeVar.equals(typeExp)) {
+      return typeEnv;
+    } else {
+      throw new MyException("Assignment: Right hand side and left hand side have different types");
+    }
   }
 }

@@ -158,6 +158,18 @@ public class View {
                 new PrintStmt(new VarExp("v")))));
   }
 
+  private static Stmt exTypeError1() {
+    // assigning boolean to integer variable
+    return new CompStmt(
+        new VarDeclStmt("v", new IntType()),
+        new AssignStmt("v", new ValueExp(new BoolValue(true))));
+  }
+
+  private static Stmt exTypeError2() {
+    // using undeclared variable
+    return new CompStmt(new VarDeclStmt("v", new IntType()), new PrintStmt(new VarExp("x")));
+  }
+
   private static PrgState createPrgState(Stmt originalPrg) throws MyException {
     MyIStack<Stmt> exeStack = new MyStack<>();
     MyIDict<String, Value> symTable = new MyDict<>();
@@ -186,6 +198,10 @@ public class View {
     menu.addCommand(new RunExample("7", ex7(), createController(ex7(), "log7.txt")));
     menu.addCommand(new RunExample("8", ex8(), createController(ex8(), "log8.txt")));
     menu.addCommand(new RunExample("9", ex9(), createController(ex9(), "log9.txt")));
+    menu.addCommand(
+        new RunExample("10", exTypeError1(), createController(exTypeError1(), "log10.txt")));
+    menu.addCommand(
+        new RunExample("11", exTypeError2(), createController(exTypeError2(), "log11.txt")));
 
     menu.addCommand(new ExitCommand("0", "Exit"));
 

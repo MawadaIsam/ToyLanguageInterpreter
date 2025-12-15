@@ -8,6 +8,7 @@ import model.ADT.MyIStack;
 import model.PrgState;
 import model.exp.Exp;
 import model.types.RefType;
+import model.types.Type;
 import model.values.RefValue;
 import model.values.Value;
 
@@ -50,5 +51,17 @@ public class NewStmt implements Stmt {
   @Override
   public String toString() {
     return " New ( " + varName + ", " + exp.toString() + ")";
+  }
+
+  @Override
+  public MyIDict<String, Type> typecheck(MyIDict<String, Type> typeEnv) throws MyException {
+    Type typeVar = typeEnv.find(varName);
+    Type typeExp = exp.typecheck(typeEnv);
+
+    if (typeVar.equals(new RefType(typeExp))) {
+      return typeEnv;
+    } else {
+      throw new MyException("New Stmt: right hand side and left hand side have different types");
+    }
   }
 }

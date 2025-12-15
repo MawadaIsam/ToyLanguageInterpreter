@@ -4,6 +4,8 @@ import exceptions.ExpressionException;
 import exceptions.MyException;
 import model.ADT.MyIDict;
 import model.ADT.MyIHeap;
+import model.types.RefType;
+import model.types.Type;
 import model.values.RefValue;
 import model.values.Value;
 
@@ -28,6 +30,18 @@ public class ReadHeapExp implements Exp {
       throw new ExpressionException("Address" + address + " is not defined in the heap");
     }
     return hp.get(address);
+  }
+
+  @Override
+  public Type typecheck(MyIDict<String, Type> typeEnv) throws MyException {
+    Type type = exp.typecheck(typeEnv);
+
+    if (type instanceof RefType) {
+      RefType refType = (RefType) type;
+      return refType.getInner();
+    } else {
+      throw new MyException("The ReadHeap argument is not a ref type");
+    }
   }
 
   @Override

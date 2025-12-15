@@ -2,10 +2,13 @@ package model.statements;
 
 import exceptions.ExpressionException;
 import exceptions.MyException;
+import model.ADT.MyDict;
+import model.ADT.MyIDict;
 import model.ADT.MyIStack;
 import model.PrgState;
 import model.exp.Exp;
 import model.types.BoolType;
+import model.types.Type;
 import model.values.BoolValue;
 import model.values.Value;
 
@@ -43,5 +46,26 @@ public class IfStmt implements Stmt {
       stack.push(elseS);
     }
     return state;
+  }
+
+  @Override
+  public MyIDict<String, Type> typecheck(MyIDict<String, Type> typeEnv) throws MyException {
+    Type typeExp = exp.typecheck(typeEnv);
+
+    if (typeExp.equals(new BoolType())) {
+      thenS.typecheck(cloneTypeEnv(typeEnv));
+      elseS.typecheck(cloneTypeEnv(typeEnv));
+      return typeEnv;
+    } else {
+      throw new MyException("Condition is not boolean");
+    }
+  }
+
+  private MyIDict<String, Type> cloneTypeEnv(MyIDict<String, Type> typeEnv) throws MyException {
+    MyIDict<String, Type> cloned = new MyDict<>();
+    for (String key : typeEnv.getKeys()) {
+      cloned.update(key, typeEnv.find(key));
+    }
+    return cloned;
   }
 }

@@ -5,6 +5,7 @@ import exceptions.MyException;
 import model.ADT.MyIDict;
 import model.ADT.MyIHeap;
 import model.types.BoolType;
+import model.types.Type;
 import model.values.BoolValue;
 import model.values.Value;
 
@@ -39,6 +40,22 @@ public class LogicExp implements Exp {
 
       } else throw new ExpressionException("Second operand is not a boolean");
     } else throw new ExpressionException("First operand is not a boolean");
+  }
+
+  @Override
+  public Type typecheck(MyIDict<String, Type> typeEnv) throws MyException {
+    Type type1 = left.typecheck(typeEnv);
+    Type type2 = right.typecheck(typeEnv);
+
+    if (type1.equals(new BoolType())) {
+      if (type2.equals(new BoolType())) {
+        return new BoolType();
+      } else {
+        throw new MyException("Second operand is not a boolean");
+      }
+    } else {
+      throw new MyException("First operand is not a boolean");
+    }
   }
 
   @Override

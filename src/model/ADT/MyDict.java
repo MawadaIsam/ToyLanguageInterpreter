@@ -3,6 +3,7 @@ package model.ADT;
 import exceptions.ADTException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class MyDict<K, V> implements MyIDict<K, V> {
   private Map<K, V> map;
@@ -42,6 +43,11 @@ public class MyDict<K, V> implements MyIDict<K, V> {
   public void remove(K key) throws ADTException {
     if (!isDefined(key)) throw new ADTException("Cannot remove key: " + key + "not found.");
     map.remove(key);
+  }
+
+  @Override
+  public Set<K> getKeys() {
+    return map.keySet();
   }
 
   public String toString() {

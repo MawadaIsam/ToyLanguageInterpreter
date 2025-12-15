@@ -8,6 +8,7 @@ import model.ADT.MyIStack;
 import model.PrgState;
 import model.exp.Exp;
 import model.types.BoolType;
+import model.types.Type;
 import model.values.BoolValue;
 import model.values.Value;
 
@@ -37,6 +38,18 @@ public class WhileStmt implements Stmt {
       stack.push(whileS);
     }
     return state;
+  }
+
+  @Override
+  public MyIDict<String, Type> typecheck(MyIDict<String, Type> typeEnv) throws MyException {
+    Type typeExp = exp.typecheck(typeEnv);
+
+    if (typeExp instanceof BoolType) {
+      whileS.typecheck(typeEnv);
+      return typeEnv;
+    } else {
+      throw new MyException("While condition is not a boolean");
+    }
   }
 
   @Override

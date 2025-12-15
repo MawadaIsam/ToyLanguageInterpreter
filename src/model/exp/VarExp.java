@@ -1,8 +1,10 @@
 package model.exp;
 
 import exceptions.ExpressionException;
+import exceptions.MyException;
 import model.ADT.MyIDict;
 import model.ADT.MyIHeap;
+import model.types.Type;
 import model.values.Value;
 
 public class VarExp implements Exp {
@@ -16,6 +18,11 @@ public class VarExp implements Exp {
   public Value eval(MyIDict<String, Value> tbl, MyIHeap<Integer, Value> hp)
       throws ExpressionException {
     return tbl.find(id);
+  }
+
+  @Override
+  public Type typecheck(MyIDict<String, Type> typeEnv) throws MyException {
+    return typeEnv.find(id);
   }
 
   @Override

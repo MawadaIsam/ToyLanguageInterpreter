@@ -6,6 +6,8 @@ import model.ADT.MyIDict;
 import model.ADT.MyIHeap;
 import model.PrgState;
 import model.exp.Exp;
+import model.types.RefType;
+import model.types.Type;
 import model.values.RefValue;
 import model.values.Value;
 
@@ -50,5 +52,17 @@ public class WriteHeapStmt implements Stmt {
   @Override
   public String toString() {
     return "Write heap Statement (" + varName + " ," + exp.toString() + ")";
+  }
+
+  @Override
+  public MyIDict<String, Type> typecheck(MyIDict<String, Type> typeEnv) throws MyException {
+    Type typeVar = typeEnv.find(varName);
+    Type typeExp = exp.typecheck(typeEnv);
+
+    if (typeVar.equals(new RefType(typeExp))) {
+      return typeEnv;
+    } else {
+      throw new MyException("Heap writing: left and right hand side have different types");
+    }
   }
 }

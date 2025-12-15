@@ -9,6 +9,7 @@ import model.ADT.MyIDict;
 import model.PrgState;
 import model.exp.Exp;
 import model.types.StringType;
+import model.types.Type;
 import model.values.StringValue;
 import model.values.Value;
 
@@ -36,6 +37,18 @@ public class OpenRFile implements Stmt {
       throw new MyException("Cannot open file" + fileName.getValue() + " : " + e.getMessage());
     }
     return prg;
+  }
+
+  @Override
+  public MyIDict<String, Type> typecheck(MyIDict<String, Type> typeEnv) throws MyException {
+    Type typeExp = exp.typecheck(typeEnv);
+
+    if (typeExp instanceof StringType) {
+      return typeEnv;
+
+    } else {
+      throw new MyException("OpenFile: Expression is not a string");
+    }
   }
 
   @Override

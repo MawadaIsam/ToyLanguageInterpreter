@@ -4,7 +4,9 @@ import exceptions.ExpressionException;
 import exceptions.MyException;
 import model.ADT.MyIDict;
 import model.ADT.MyIHeap;
+import model.types.BoolType;
 import model.types.IntType;
+import model.types.Type;
 import model.values.BoolValue;
 import model.values.IntValue;
 import model.values.Value;
@@ -43,6 +45,22 @@ public class RelExp implements Exp {
       case "<=" -> new BoolValue(n1 <= n2);
       default -> throw new ExpressionException("Invalid relational operator");
     };
+  }
+
+  @Override
+  public Type typecheck(MyIDict<String, Type> typeEnv) throws MyException {
+    Type type1 = left.typecheck(typeEnv);
+    Type type2 = right.typecheck(typeEnv);
+
+    if (type1.equals(new IntType())) {
+      if (type2.equals(new IntType())) {
+        return new BoolType();
+      } else {
+        throw new MyException("Second operand is not a integer");
+      }
+    } else {
+      throw new MyException("First operand is not a integer");
+    }
   }
 
   @Override
