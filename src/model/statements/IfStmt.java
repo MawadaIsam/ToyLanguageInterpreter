@@ -45,7 +45,7 @@ public class IfStmt implements Stmt {
     } else {
       stack.push(elseS);
     }
-    return state;
+    return null;
   }
 
   @Override

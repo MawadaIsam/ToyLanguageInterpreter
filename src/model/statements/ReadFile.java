@@ -69,7 +69,7 @@ public class ReadFile implements Stmt {
     } catch (NumberFormatException e) {
       throw new MyException("File Contains a non-integer value");
     }
-    return prg;
+    return null;
   }
 
   @Override

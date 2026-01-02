@@ -37,7 +37,7 @@ public class WhileStmt implements Stmt {
       stack.push(new WhileStmt(exp, whileS));
       stack.push(whileS);
     }
-    return state;
+    return null;
   }
 
   @Override

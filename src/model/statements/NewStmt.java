@@ -45,7 +45,7 @@ public class NewStmt implements Stmt {
     heap.add(newAddress, expValue);
 
     symTable.update(varName, new RefValue(newAddress, varType.getInner()));
-    return state;
+    return null;
   }
 
   @Override

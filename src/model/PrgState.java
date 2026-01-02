@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.ExpressionException;
 import exceptions.MyException;
 import java.io.BufferedReader;
 import model.ADT.*;
@@ -8,49 +9,115 @@ import model.values.StringValue;
 import model.values.Value;
 
 public class PrgState {
-    MyIStack<Stmt> exeStack;
-    MyIDict<String, Value> symTable;
-    MyIList<Value> out;
-    MyIHeap<Integer, Value> heap;
-    MyIDict<StringValue, BufferedReader> fileTable;
-    Stmt originalProgram;
 
-    public PrgState(MyIStack<Stmt> stk, MyIDict<String, Value> symtbl, MyIList<Value> ot,MyIDict<StringValue,BufferedReader> filetbl,MyIHeap<Integer,Value> hp ,Stmt prg) throws MyException {
-        exeStack = stk;
-        symTable = symtbl;
-        out = ot;
-        fileTable = filetbl;
-        heap = hp;
-        originalProgram = prg;// better do it with a deep copy
-        stk.push(prg);
-    }
-    public MyIStack<Stmt> getStk() {
-        return exeStack;
-    }
-    public MyIDict<String, Value> getSymTable() {
-        return symTable;
-    }
-    public MyIList<Value> getOut() {
-        return out;
-    }
-    public MyIDict<StringValue,BufferedReader> getFileTable() {
-        return fileTable;
-    }
+  private static int nextId = 1;
+  MyIStack<Stmt> exeStack;
+  MyIDict<String, Value> symTable;
+  MyIList<Value> out;
+  MyIHeap<Integer, Value> heap;
+  MyIDict<StringValue, BufferedReader> fileTable;
+  Stmt originalProgram;
+  private int id;
 
-    public void setFileTable(MyIDict<StringValue,BufferedReader> fileTable) {
-        this.fileTable = fileTable;
-    }
+  public PrgState(
+      MyIStack<Stmt> stk,
+      MyIDict<String, Value> symtbl,
+      MyIList<Value> ot,
+      MyIDict<StringValue, BufferedReader> filetbl,
+      MyIHeap<Integer, Value> hp,
+      Stmt prg) {
+    this.id = getNextId();
 
-    public MyIHeap<Integer, Value> getHeap() {
-        return heap;
+    exeStack = stk;
+    symTable = symtbl;
+    out = ot;
+    fileTable = filetbl;
+    heap = hp;
+    originalProgram = deepCopy(prg); // better do it with a deep copy
+    // stk.push(prg);
+    if (originalProgram != null && this.exeStack.isEmpty()) {
+      stk.push(originalProgram);
     }
+  }
 
-    @Override
-    public String toString() {
-        return "ExeStack: " + exeStack.toString()+
-                "\nSymTable: " + symTable.getContent().toString() +
-                "\nOut: " + out.toString()+
-                "\nFileTable: " + fileTable.getContent().toString()+
-                "\nHeap: "+ heap.getContent().toString()+"\n";
+  // Constructor for fork(child thread)
+  public PrgState(
+      MyIStack<Stmt> stk,
+      MyIDict<String, Value> symtbl,
+      MyIList<Value> ot,
+      MyIDict<StringValue, BufferedReader> filetbl,
+      MyIHeap<Integer, Value> hp) {
+    exeStack = stk;
+    symTable = symtbl;
+    out = ot;
+    fileTable = filetbl;
+    heap = hp;
+    this.id = getNextId();
+  }
+
+  private static synchronized int getNextId() {
+    return nextId++;
+  }
+
+  public boolean isNotCompleted() {
+    return !exeStack.isEmpty();
+  }
+
+  public PrgState oneStep() throws MyException, ExpressionException {
+    if (exeStack.isEmpty()) {
+      throw new MyException("Execution Stack is empty");
     }
+    Stmt crtStmt = exeStack.pop();
+    return crtStmt.execute(this);
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public MyIStack<Stmt> getStk() {
+    return exeStack;
+  }
+
+  public MyIDict<String, Value> getSymTable() {
+    return symTable;
+  }
+
+  public MyIList<Value> getOut() {
+    return out;
+  }
+
+  public MyIDict<StringValue, BufferedReader> getFileTable() {
+    return fileTable;
+  }
+
+  public void setFileTable(MyIDict<StringValue, BufferedReader> fileTable) {
+    this.fileTable = fileTable;
+  }
+
+  public MyIHeap<Integer, Value> getHeap() {
+    return heap;
+  }
+
+  @Override
+  public String toString() {
+    return "ID: "
+        + id
+        + "\n"
+        + "ExeStack: "
+        + exeStack.toString()
+        + "\nSymTable: "
+        + symTable.getContent().toString()
+        + "\nOut: "
+        + out.toString()
+        + "\nFileTable: "
+        + fileTable.getContent().toString()
+        + "\nHeap: "
+        + heap.getContent().toString()
+        + "\n";
+  }
+
+  private Stmt deepCopy(Stmt prg) {
+    return prg;
+  }
 }

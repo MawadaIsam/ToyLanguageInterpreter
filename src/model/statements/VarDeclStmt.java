@@ -35,7 +35,7 @@ public class VarDeclStmt implements Stmt {
           throw new MyException("the variable "+name+" is of unsupported type");
       }*/
     else symTable.update(name, type.defaultValue());
-    return state;
+    return null;
   }
 
   @Override

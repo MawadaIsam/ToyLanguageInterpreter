@@ -42,7 +42,7 @@ public class CloseRFile implements Stmt {
     } catch (ADTException | IOException e) {
       throw new MyException("IO error while closing ");
     }
-    return prg;
+    return null;
   }
 
   @Override

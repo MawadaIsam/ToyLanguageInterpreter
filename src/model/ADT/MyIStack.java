@@ -11,5 +11,7 @@ public interface MyIStack<T> {
 
   String toString();
 
+  List<T> getAll();
+
   List<T> getReversed();
 }

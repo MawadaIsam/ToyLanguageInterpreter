@@ -38,8 +38,18 @@ public class MyStack<T> implements MyIStack<T> {
 
   @Override
   public List<T> getReversed() {
-    List<T> list = new ArrayList<>(stack);
+    List<T> list = new ArrayList<>();
     Collections.reverse(list);
+    return list;
+  }
+
+  @Override
+  public List<T> getAll() {
+    List<T> list = new ArrayList<>();
+
+    for (int i = stack.size() - 1; i >= 0; i--) {
+      list.add(stack.get(i));
+    }
     return list;
   }
 }

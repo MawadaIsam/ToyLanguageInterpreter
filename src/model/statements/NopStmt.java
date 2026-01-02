@@ -8,7 +8,7 @@ import model.types.Type;
 public class NopStmt implements Stmt {
   @Override
   public PrgState execute(PrgState state) throws MyException {
-    return state;
+    return null;
   }
 
   @Override

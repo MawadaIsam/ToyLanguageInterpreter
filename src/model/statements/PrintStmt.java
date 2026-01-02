@@ -29,6 +29,6 @@ public class PrintStmt implements Stmt {
   public PrgState execute(PrgState state) throws MyException, ExpressionException {
     MyIList<Value> out = state.getOut();
     out.add(exp.eval(state.getSymTable(), state.getHeap()));
-    return state;
+    return null;
   }
 }

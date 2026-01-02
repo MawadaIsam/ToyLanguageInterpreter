@@ -36,7 +36,7 @@ public class OpenRFile implements Stmt {
     } catch (IOException e) {
       throw new MyException("Cannot open file" + fileName.getValue() + " : " + e.getMessage());
     }
-    return prg;
+    return null;
   }
 
   @Override

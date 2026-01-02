@@ -28,4 +28,9 @@ public class MyList<T> implements MyIList<T> {
   public String toString() {
     return list.toString();
   }
+
+  @Override
+  public List<T> getAll() {
+    return new ArrayList<>(list); // returning a copy;
+  }
 }

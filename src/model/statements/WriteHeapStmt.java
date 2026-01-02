@@ -46,7 +46,7 @@ public class WriteHeapStmt implements Stmt {
       throw new MyException("Type mismatch in heap writing");
     }
     heap.update(address, expValue);
-    return state;
+    return null;
   }
 
   @Override
