@@ -2,6 +2,7 @@ package model.statements;
 
 import exceptions.ExpressionException;
 import exceptions.MyException;
+import model.ADT.MyDict;
 import model.ADT.MyIDict;
 import model.ADT.MyIHeap;
 import model.ADT.MyIStack;
@@ -43,9 +44,10 @@ public class WhileStmt implements Stmt {
   @Override
   public MyIDict<String, Type> typecheck(MyIDict<String, Type> typeEnv) throws MyException {
     Type typeExp = exp.typecheck(typeEnv);
+    MyIDict<String, Type> clonedTypeEnv = cloneTypeEnv(typeEnv);
 
     if (typeExp instanceof BoolType) {
-      whileS.typecheck(typeEnv);
+      whileS.typecheck(clonedTypeEnv);
       return typeEnv;
     } else {
       throw new MyException("While condition is not a boolean");
@@ -55,5 +57,15 @@ public class WhileStmt implements Stmt {
   @Override
   public String toString() {
     return "While{" + exp.toString() + "}" + whileS.toString();
+  }
+
+  private MyIDict<String, Type> cloneTypeEnv(MyIDict<String, Type> original) throws MyException {
+    MyIDict<String, Type> newTypeEnv = new MyDict<>();
+    for (String key : original.getKeys()) {
+      Type type = original.find(key);
+      newTypeEnv.update(key, type);
+    }
+
+    return newTypeEnv;
   }
 }

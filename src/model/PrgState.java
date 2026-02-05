@@ -10,12 +10,13 @@ import model.values.Value;
 
 public class PrgState {
 
-  private static int nextId = 1;
+  private static int nextId = 0;
   MyIStack<Stmt> exeStack;
   MyIDict<String, Value> symTable;
   MyIList<Value> out;
   MyIHeap<Integer, Value> heap;
   MyIDict<StringValue, BufferedReader> fileTable;
+  MyIBarrier barrier;
   Stmt originalProgram;
   private int id;
 
@@ -25,6 +26,7 @@ public class PrgState {
       MyIList<Value> ot,
       MyIDict<StringValue, BufferedReader> filetbl,
       MyIHeap<Integer, Value> hp,
+      MyIBarrier barrier,
       Stmt prg) {
     this.id = getNextId();
 
@@ -33,8 +35,8 @@ public class PrgState {
     out = ot;
     fileTable = filetbl;
     heap = hp;
+    this.barrier = barrier;
     originalProgram = deepCopy(prg); // better do it with a deep copy
-    // stk.push(prg);
     if (originalProgram != null && this.exeStack.isEmpty()) {
       stk.push(originalProgram);
     }
@@ -46,12 +48,14 @@ public class PrgState {
       MyIDict<String, Value> symtbl,
       MyIList<Value> ot,
       MyIDict<StringValue, BufferedReader> filetbl,
-      MyIHeap<Integer, Value> hp) {
+      MyIHeap<Integer, Value> hp,
+      MyIBarrier barrier) {
     exeStack = stk;
     symTable = symtbl;
     out = ot;
     fileTable = filetbl;
     heap = hp;
+    this.barrier = barrier;
     this.id = getNextId();
   }
 
@@ -99,6 +103,10 @@ public class PrgState {
     return heap;
   }
 
+  public MyIBarrier getBarrier() {
+    return barrier;
+  }
+
   @Override
   public String toString() {
     return "ID: "
@@ -114,6 +122,8 @@ public class PrgState {
         + fileTable.getContent().toString()
         + "\nHeap: "
         + heap.getContent().toString()
+        + "\nBarrier: "
+        + barrier.toString()
         + "\n";
   }
 

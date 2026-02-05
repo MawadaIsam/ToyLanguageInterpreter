@@ -199,8 +199,9 @@ public class View {
     MyIList<Value> output = new MyList<>();
     MyIDict<StringValue, BufferedReader> fileTable = new MyDict<>();
     MyIHeap<Integer, Value> heap = new MyHeap<>();
+    MyIBarrier barrier = new MyBarrier();
 
-    return new PrgState(exeStack, symTable, output, fileTable, heap, originalPrg);
+    return new PrgState(exeStack, symTable, output, fileTable, heap, barrier, originalPrg);
   }
 
   private static Controller createController(Stmt stmt, String logFilePath) throws MyException {

@@ -194,6 +194,131 @@ public class Main extends Application {
                             new CompStmt(
                                 new PrintStmt(new VarExp("v")),
                                 new PrintStmt(new ReadHeapExp(new VarExp("a"))))))))));
+    Stmt fork =
+        new ForkStmt(
+            new CompStmt(
+                new PrintStmt(new VarExp("v")),
+                new CompStmt(
+                    new AssignStmt(
+                        "x", new ArithExp(new VarExp("x"), new ValueExp(new IntValue(1)), 2)),
+                    new PrintStmt(new VarExp("x")))));
+
+    programs.add(
+        new CompStmt(
+            new VarDeclStmt("v", new IntType()),
+            new CompStmt(
+                new VarDeclStmt("x", new IntType()),
+                new CompStmt(
+                    new AssignStmt("v", new ValueExp(new IntValue(3))),
+                    new CompStmt(
+                        new AssignStmt("x", new ValueExp(new IntValue(2))),
+                        new CompStmt(
+                            new RepeatStmt(
+                                new CompStmt(
+                                    fork,
+                                    new AssignStmt(
+                                        "v",
+                                        new ArithExp(
+                                            new VarExp("v"), new ValueExp(new IntValue(1)), 1))),
+                                new RelExp(new VarExp("v"), new ValueExp(new IntValue(0)), "==")),
+                            new CompStmt(
+                                new NopStmt(),
+                                new CompStmt(
+                                    new NopStmt(),
+                                    new CompStmt(
+                                        new NopStmt(),
+                                        new CompStmt(
+                                            new NopStmt(),
+                                            new CompStmt(
+                                                new NopStmt(),
+                                                new CompStmt(
+                                                    new NopStmt(),
+                                                    new CompStmt(
+                                                        new NopStmt(),
+                                                        new PrintStmt(new VarExp("x")))))))))))))));
+
+    Stmt fork1 =
+        new ForkStmt(
+            new CompStmt(
+                new AwaitStmt("id"),
+                new CompStmt(
+                    new WriteHeapStmt(
+                        "v1",
+                        new ArithExp(
+                            new ReadHeapExp(new VarExp("v1")), new ValueExp(new IntValue(10)), 3)),
+                    new CompStmt(
+                        new NopStmt(),
+                        new CompStmt(
+                            new NopStmt(), new PrintStmt(new ReadHeapExp(new VarExp("v1"))))))));
+
+    Stmt fork2 =
+        new ForkStmt(
+            new CompStmt(
+                new AwaitStmt("id"),
+                new CompStmt(
+                    new WriteHeapStmt(
+                        "v2",
+                        new ArithExp(
+                            new ReadHeapExp(new VarExp("v2")), new ValueExp(new IntValue(10)), 3)),
+                    new CompStmt(
+                        new NopStmt(),
+                        new CompStmt(
+                            new NopStmt(),
+                            new CompStmt(
+                                new NopStmt(),
+                                new CompStmt(
+                                    new WriteHeapStmt(
+                                        "v2",
+                                        new ArithExp(
+                                            new ReadHeapExp(new VarExp("v2")),
+                                            new ValueExp(new IntValue(10)),
+                                            3)),
+                                    new CompStmt(
+                                        new WriteHeapStmt(
+                                            "v2",
+                                            new ArithExp(
+                                                new ReadHeapExp(new VarExp("v2")),
+                                                new ValueExp(new IntValue(10)),
+                                                3)),
+                                        new PrintStmt(new ReadHeapExp(new VarExp("v2")))))))))));
+
+    Stmt fork3 =
+        new ForkStmt(
+            new CompStmt(
+                new AwaitStmt("id"),
+                new PrintStmt(
+                    new ArithExp(
+                        new ReadHeapExp(new VarExp("v3")), new ValueExp(new IntValue(40)), 3))));
+
+    programs.add(
+        new CompStmt(
+            new VarDeclStmt("v1", new RefType(new IntType())),
+            new CompStmt(
+                new VarDeclStmt("v2", new RefType(new IntType())),
+                new CompStmt(
+                    new VarDeclStmt("v3", new RefType(new IntType())),
+                    new CompStmt(
+                        new VarDeclStmt("id", new IntType()),
+                        new CompStmt(
+                            new AssignStmt("id", new ValueExp(new IntValue(5))),
+                            new CompStmt(
+                                new NewStmt("v1", new ValueExp(new IntValue(2))),
+                                new CompStmt(
+                                    new NewStmt("v2", new ValueExp(new IntValue(3))),
+                                    new CompStmt(
+                                        new NewStmt("v3", new ValueExp(new IntValue(4))),
+                                        new CompStmt(
+                                            new NewBarrierStmt(
+                                                "id", new ReadHeapExp(new VarExp("v2"))),
+                                            new CompStmt(
+                                                fork1,
+                                                new CompStmt(
+                                                    fork2,
+                                                    new CompStmt(
+                                                        fork3,
+                                                        new PrintStmt(
+                                                            new ReadHeapExp(
+                                                                new VarExp("v3"))))))))))))))));
 
     return programs;
   }

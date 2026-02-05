@@ -78,6 +78,11 @@ public class Controller {
     // add newly created threads to the list
     prgList.addAll(newPrgList);
 
+    // adding garbage collector
+    if (!prgList.isEmpty()) {
+      conservativeGarbageCollector(prgList);
+    }
+
     // logging state after execution
     prgList.forEach(
         prg -> {

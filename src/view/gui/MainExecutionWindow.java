@@ -1,6 +1,7 @@
 package view.gui;
 
 import controller.Controller;
+import exceptions.MyException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import model.ADT.MyIDict;
 import model.PrgState;
 import model.values.Value;
@@ -22,6 +24,7 @@ public class MainExecutionWindow {
   // ui components
   TextField nrPrgStatesField;
   TableView<HeapEntry> heapTableView;
+  TableView<BarrierEntry> barrierTableView;
   ListView<String> outListView;
   ListView<String> fileTableListView;
   ListView<Integer> prgStateIdsListView;
@@ -31,7 +34,7 @@ public class MainExecutionWindow {
   private Stage stage;
   private Controller controller;
 
-  public MainExecutionWindow(Controller controller) {
+  public MainExecutionWindow(Controller controller) throws MyException {
     this.controller = controller;
     this.stage = new Stage();
     initUI();
@@ -51,6 +54,9 @@ public class MainExecutionWindow {
     heapTableView = createHeapTableView();
     VBox heapBox = new VBox(5, new Label("Heap Table:"), heapTableView);
 
+    barrierTableView = createBarrierTableView();
+    VBox barrierBox = new VBox(5, new Label("Cyclic Barrier Table:"), barrierTableView);
+
     // center-left: output and file table
     outListView = new ListView<>();
     fileTableListView = new ListView<>();
@@ -66,7 +72,11 @@ public class MainExecutionWindow {
         .addListener(
             (observable, oldValue, newValue) -> {
               if (newValue != null) {
-                updatePrgStateDetails(newValue);
+                try {
+                  updatePrgStateDetails(newValue);
+                } catch (MyException e) {
+                  throw new RuntimeException(e);
+                }
               }
             });
     VBox idsBox = new VBox(5, new Label("Program State IDs:"), prgStateIdsListView);
@@ -91,9 +101,12 @@ public class MainExecutionWindow {
     mainGrid.setVgap(10);
     mainGrid.setPadding(new Insets(10));
 
-    // column 0: heap
+    // column 0: heap and barrier table
     mainGrid.add(heapBox, 0, 0);
     GridPane.setRowSpan(heapBox, 2);
+
+    mainGrid.add(barrierBox, 0, 1);
+    GridPane.setRowSpan(barrierBox, 2);
 
     // column 1: output and file table
     mainGrid.add(centerLeftBox, 1, 0);
@@ -144,6 +157,27 @@ public class MainExecutionWindow {
     return table;
   }
 
+  private TableView<BarrierEntry> createBarrierTableView() {
+    TableView<BarrierEntry> table = new TableView<>();
+
+    TableColumn<BarrierEntry, Integer> indexCol = new TableColumn<>("Index");
+    indexCol.setCellValueFactory(new PropertyValueFactory<>("index"));
+    indexCol.setPrefWidth(80);
+
+    TableColumn<BarrierEntry, Integer> valueCol = new TableColumn<>("Value");
+    valueCol.setCellValueFactory(new PropertyValueFactory<>("value"));
+    valueCol.setPrefWidth(80);
+
+    TableColumn<BarrierEntry, String> listCol = new TableColumn<>("List");
+    indexCol.setCellValueFactory(new PropertyValueFactory<>("list"));
+    indexCol.setPrefWidth(120);
+
+    table.getColumns().addAll(indexCol, valueCol, listCol);
+    table.setPrefHeight(300);
+
+    return table;
+  }
+
   private TableView<SymTableEntry> createSymTableView() {
     TableView<SymTableEntry> table = new TableView<>();
 
@@ -161,7 +195,7 @@ public class MainExecutionWindow {
     return table;
   }
 
-  private void populateUI() {
+  private void populateUI() throws MyException {
     updateAllComponents();
   }
 
@@ -181,12 +215,12 @@ public class MainExecutionWindow {
 
       // update ui
       updateAllComponents();
-    } catch (InterruptedException e) {
+    } catch (InterruptedException | MyException e) {
       showAlert("Execution Error", "Error during Execution:" + e.getMessage());
     }
   }
 
-  private void updateAllComponents() {
+  private void updateAllComponents() throws MyException {
     List<PrgState> prgStates = controller.getRepository().getPrgList();
 
     // updating no of prgstates
@@ -197,6 +231,7 @@ public class MainExecutionWindow {
       updateHeapTable(prgStates.get(0));
       updateOutList(prgStates.get(0));
       updateFileTableList(prgStates.get(0));
+      updateBarrierTable(prgStates.get(0));
     }
 
     // update program state ids
@@ -222,6 +257,19 @@ public class MainExecutionWindow {
     heapTableView.setItems(heapEntries);
   }
 
+  private void updateBarrierTable(PrgState prgState) {
+    Map<Integer, Pair<Integer, List<Integer>>> barrier = prgState.getBarrier().getContent();
+    ObservableList<BarrierEntry> barrierEntries = FXCollections.observableArrayList();
+
+    for (Map.Entry<Integer, Pair<Integer, List<Integer>>> entry : barrier.entrySet()) {
+      barrierEntries.add(
+          new BarrierEntry(
+              entry.getKey(), entry.getValue().getKey(), entry.getValue().getValue().toString()));
+    }
+
+    barrierTableView.setItems(barrierEntries);
+  }
+
   private void updateOutList(PrgState prgState) {
     ObservableList<String> outItems =
         FXCollections.observableArrayList(
@@ -245,7 +293,7 @@ public class MainExecutionWindow {
     prgStateIdsListView.setItems(ids);
   }
 
-  private void updatePrgStateDetails(Integer prgStateId) {
+  private void updatePrgStateDetails(Integer prgStateId) throws MyException {
     List<PrgState> prgStates = controller.getRepository().getPrgList();
 
     PrgState selectedPrgState =
@@ -257,7 +305,7 @@ public class MainExecutionWindow {
     }
   }
 
-  private void updateSymTable(PrgState prgState) {
+  private void updateSymTable(PrgState prgState) throws MyException {
     MyIDict<String, Value> symTable = prgState.getSymTable();
     ObservableList<SymTableEntry> symTableEntries = FXCollections.observableArrayList();
 
@@ -304,6 +352,30 @@ public class MainExecutionWindow {
 
     public String getValue() {
       return value.get();
+    }
+  }
+
+  public static class BarrierEntry {
+    private final SimpleIntegerProperty index;
+    private final SimpleIntegerProperty value;
+    private final SimpleStringProperty list;
+
+    public BarrierEntry(int index, int value, String list) {
+      this.index = new SimpleIntegerProperty(index);
+      this.value = new SimpleIntegerProperty(value);
+      this.list = new SimpleStringProperty(list);
+    }
+
+    public int getIndex() {
+      return index.get();
+    }
+
+    public int getValue() {
+      return value.get();
+    }
+
+    public String getList() {
+      return list.get();
     }
   }
 

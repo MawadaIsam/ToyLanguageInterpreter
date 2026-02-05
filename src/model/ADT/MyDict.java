@@ -1,6 +1,7 @@
 package model.ADT;
 
 import exceptions.ADTException;
+import exceptions.MyException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -35,7 +36,10 @@ public class MyDict<K, V> implements MyIDict<K, V> {
   }
 
   @Override
-  public V find(K key) {
+  public V find(K key) throws MyException {
+      if (! isDefined(key)) {
+          throw new MyException("Key " + key + " is not defined");
+      }
     return map.get(key);
   }
 

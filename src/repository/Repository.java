@@ -7,7 +7,7 @@ import java.util.List;
 import model.PrgState;
 
 public class Repository implements IRespository {
-  // private PrgState prg;
+
   private List<PrgState> prgStates;
   private String logFilePath;
 
@@ -16,8 +16,6 @@ public class Repository implements IRespository {
     this.prgStates.add(prg);
     this.logFilePath = logFilePath;
   }
-
-  // public Repository(PrgState prg) {this.prg = prg;}
 
   @Override
   public List<PrgState> getPrgList() {

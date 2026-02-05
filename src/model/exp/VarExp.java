@@ -16,7 +16,7 @@ public class VarExp implements Exp {
 
   @Override
   public Value eval(MyIDict<String, Value> tbl, MyIHeap<Integer, Value> hp)
-      throws ExpressionException {
+      throws ExpressionException, MyException {
     return tbl.find(id);
   }
 
